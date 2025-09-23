@@ -1,0 +1,24 @@
+<form [formGroup]="candidateForm" (ngSubmit)="submit()">
+  <div class="formContainer">
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Surname</mat-label>
+      <input matInput formControlName="surname" />
+    </mat-form-field>
+
+    <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload />
+
+    <button matFab extended color="primary" (click)="fileUpload.click()">
+      <mat-icon>upload</mat-icon>
+      {{ fileName || 'No file uploaded yet.' }}
+    </button>
+
+    <input #fileUpload type="file" style="display: none" (change)="onFileSelected($event)" />
+
+    <button matFab extended type="submit" [disabled]="candidateForm.invalid">Submit</button>
+  </div>
+</form>

@@ -1,0 +1,14 @@
+.formContainer {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.file-upload {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.file-input {
+    display: none;
+}
