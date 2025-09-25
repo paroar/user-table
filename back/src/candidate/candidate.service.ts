@@ -5,6 +5,7 @@ import { validate } from 'class-validator';
 import { FileCandidateDto } from 'src/candidate/dto/FileCandidate.dto';
 import { plainToInstance } from 'class-transformer';
 import { PrismaService } from 'src/database/prisma.service';
+import { QueryParamsDto } from 'src/candidate/dto/QueryParams.dto';
 
 @Injectable()
 export class CandidateService {
@@ -31,26 +32,21 @@ export class CandidateService {
       throw new BadRequestException(errors);
     }
 
-    return {
-      ...fileCandidateProperties,
-      availability: Boolean(fileCandidateProperties.availability),
-    };
+    return fileCandidateProperties;
   }
 
   async create(file: Express.Multer.File, candidateDto: CandidateDto) {
-    const fileCandidate = await this.fileCandidateProperties(file);
+    const fileCandidateProperties = await this.fileCandidateProperties(file);
     return this.prismaService.candidate.create({
-      data: { ...candidateDto, ...fileCandidate },
+      data: { ...candidateDto, ...fileCandidateProperties },
     });
   }
 
-  async get(page: number, limit: number) {
-    const skip = (page - 1) * limit;
-
+  async get(queryParamsDto: QueryParamsDto) {
     const [data, total] = await Promise.all([
       this.prismaService.candidate.findMany({
-        skip,
-        take: limit,
+        skip: queryParamsDto.getSkip(),
+        take: queryParamsDto.limit,
         orderBy: { id: 'asc' },
       }),
       this.prismaService.candidate.count(),

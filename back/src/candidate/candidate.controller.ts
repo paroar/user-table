@@ -12,6 +12,7 @@ import {
 import { CandidateService } from './candidate.service';
 import { CandidateDto } from 'src/candidate/dto/CandidateDto.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { QueryParamsDto } from 'src/candidate/dto/QueryParams.dto';
 
 @Controller()
 export class CandidateController {
@@ -27,10 +28,7 @@ export class CandidateController {
   }
 
   @Get('candidates')
-  get(
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
-  ) {
-    return this.candidateService.get(page, limit);
+  get(@Query() queryParamsDto: QueryParamsDto) {
+    return this.candidateService.get(queryParamsDto);
   }
 }
